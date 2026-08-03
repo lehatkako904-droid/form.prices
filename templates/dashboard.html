@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبۆردی بەڕێوەبەر</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="bg-blue-900 text-white shadow-md p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">داشبۆردی بەڕێوەبردنی نرخ و ڕکابەرییەکان</h1>
+        <a href="{{ url_for('logout') }}" class="bg-red-600 px-4 py-2 rounded-lg text-sm">دەرچوون</a>
+    </header>
+
+    <main class="container mx-auto my-8 p-4 space-y-8">
+        <!-- بەشی زیادکردنی نرخ -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border">
+            <h2 class="text-xl font-bold mb-4 text-blue-900">زیادکردن و نوێکردنەوەی نرخی کاڵا</h2>
+            <form method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="text" name="store_name" placeholder="ناوی فرۆشگا / پێشانگا" required class="border p-2.5 rounded-lg outline-none">
+                <input type="text" name="item_name" placeholder="ناوی کاڵا" required class="border p-2.5 rounded-lg outline-none">
+                <select name="category" class="border p-2.5 rounded-lg outline-none">
+                    <option value="ئەلکترۆنیات">ئەلکترۆنیات</option>
+                    <option value="کارەباییات">کارەباییات</option>
+                    <option value="بیناسازی">بیناسازی</option>
+                    <option value="کەلوپەل">کەلوپەل</option>
+                </select>
+                <input type="number" step="any" name="price" placeholder="نرخ بە دینار" required class="border p-2.5 rounded-lg outline-none">
+                <button type="submit" class="md:col-span-4 bg-emerald-600 text-white py-2.5 rounded-lg font-bold hover:bg-emerald-700">هەڵگرتن و نمایشکردن</button>
+            </form>
+        </div>
+
+        <!-- بەشی شیکاری نرخەکان (کەمترین و زۆرترین لە ناو ڕکابەرەکاندا) -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border">
+            <h2 class="text-xl font-bold mb-4 text-blue-900">شیکاری مڕکابەرەکان (کەمترین و زۆرترین نرخ بۆ هەر کاڵایەک)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b">
+                            <th class="p-3">ناوی کاڵا</th>
+                            <th class="p-3">کەمترین نرخ (باشترین)</th>
+                            <th class="p-3">زۆرترین نرخ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for iname, data in analysis.items() %}
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="p-3 font-bold">{{ iname }}</td>
+                            <td class="p-3 text-emerald-600 font-semibold">
+                                {{ data.min.price }} دینار 
+                                <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded mr-2">({{ data.min.store_name }})</span>
+                            </td>
+                            <td class="p-3 text-red-600 font-semibold">
+                                {{ data.max.price }} دینار 
+                                <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-2">({{ data.max.store_name }})</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3" class="p-4 text-center text-gray-500">هیچ داتایەک نییە بۆ بەراوردکاری.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- لیستی فرۆشگا تۆمارکراوەکان -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border">
+            <h2 class="text-xl font-bold mb-4 text-blue-900">پێشانگا و کۆمپانیا تۆمارکراوەکان</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {% for user in users %}
+                <div class="border p-4 rounded-lg bg-gray-50">
+                    <h3 class="font-bold text-lg text-blue-900">{{ user.name }}</h3>
+                    <p class="text-sm text-gray-600 mt-1">پەیوەندی: {{ user.phone }}</p>
+                    <p class="text-sm text-gray-600">ئیمەیڵ: {{ user.email }}</p>
+                    <span class="inline-block mt-2 text-xs bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">{{ user.category }}</span>
+                </div>
+                {% else %}
+                <p class="text-gray-500">هیچ پێشانگایەک خۆی تۆمار نەکردووە.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

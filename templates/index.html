@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>سیستەمی چاودێری نرخ و ڕکابەری</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-white text-blue-900 font-bold p-2 rounded-lg">لۆگۆ</div>
+                <h1 class="text-xl font-bold">پلاتفۆرمی فەرمی بەڕێوەبردنی نرخەکان</h1>
+            </div>
+            <div class="space-x-4 space-x-reverse">
+                <a href="{{ url_for('register') }}" class="bg-emerald-600 px-4 py-2 rounded-lg hover:bg-emerald-700">تۆمارکردنی پێشانگا</a>
+                <a href="{{ url_for('login') }}" class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-800">چوونەژوورەوەی بەڕێوەبەر</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto my-8 p-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">لیستی نرخ و کاڵا بەردەستەکان</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for item in prices %}
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{{ item.category }}</span>
+                <h3 class="text-xl font-semibold mt-3">{{ item.item_name }}</h3>
+                <p class="text-gray-600 mt-1">فرۆشگا: <span class="font-bold text-gray-900">{{ item.store_name }}</span></p>
+                <p class="text-emerald-600 font-bold text-lg mt-3">{{ item.price }} دینار</p>
+            </div>
+            {% else %}
+            <p class="text-gray-500 col-span-3 text-center py-10">هیچ نرخێک تا ئێستا تۆمار نەکراوە.</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
