@@ -5,7 +5,9 @@ import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5000", "https://github.com/lehatkako904-droid/form.prices"])
+
+# ڕێگەدان بە هەموو سەرچاوەکان بۆ CORS (بە پشتگیری credentials)
+CORS(app, supports_credentials=True)
 
 def get_db():
     conn = sqlite3.connect('database.db')
@@ -39,12 +41,10 @@ def init_db():
 
 init_db()
 
-# ڕوتی سەرەکی
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# APIەکان
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
@@ -146,4 +146,5 @@ def logout():
     return jsonify({'success': True})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # بۆ پڕۆداکشن، debug=False یان لابە
+    app.run(debug=False)
